@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # 1. 云原生无头 Android 容器 (运行无忧行 App)
+  redroid:
+    image: redroid/redroid:11.0.0-latest
+    container_name: jegotrip-android
+    privileged: true
+    ports:
+      - "5555:5555" # ADB 连接端口 (建议生产环境仅绑定 127.0.0.1)
+    volumes:
+      - redroid-data:/data
+    restart: unless-stopped
+    command:
+      - "androidboot.redroid_width=720"
+      - "androidboot.redroid_height=1280"
+      - "androidboot.redroid_dpi=320"
+      - "androidboot.redroid_fps=30"
+
+  # 2. 短信 Webhook 接收与验证码解析服务
+  sms-receiver:
+    build: .
+    container_name: jegotrip-sms-receiver
+    ports:
+      - "8080:8080" # 提供给 SmsForwarder 推送的接收端口
+    environment:
+      - PORT=8080
+      # 可选：配置 Telegram 机器人推送
+      - TG_BOT_TOKEN=
+      - TG_CHAT_ID=
+      # 可选：企业微信 / 飞书 Webhook 机器人链接
+      - WECHAT_WEBHOOK_URL=
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    depends_on:
+      - redroid
+
+volumes:
+  redroid-data:
+

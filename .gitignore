@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large Binaries / Installers (>50MB / GitHub 100MB limit)
+*.apk
+*.exe
+*.iso
+*.dmg
+
+# Runtime logs and packet captures
+captures/
+logs/
+*.jsonl
+*.log
+*.pcap
+*.har
+
+# Environment & local credentials
+.env
+.env.*
+!.env.example
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
